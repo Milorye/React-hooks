@@ -1,6 +1,15 @@
 import { useMemo, useState } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Filter from './components/Filter'
+import MovieDetails from './components/MovieDetails'
 import MovieList from './components/MovieList'
+
+const slugify = (value) =>
+  value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
 
 const initialMovies = [
   {
@@ -8,29 +17,32 @@ const initialMovies = [
     description: 'A thief who steals dreams enters a mission that could change humanity.',
     posterURL: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80',
     rating: 8.8,
+    trailerURL: 'https://www.youtube.com/embed/YoHD9XEInc0?si=E6W18sLZbZpdM_g2',
   },
   {
     title: 'The Dark Knight',
     description: 'Batman faces the Joker in an epic battle for Gotham.',
     posterURL: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=800&q=80',
     rating: 9.0,
+    trailerURL: 'https://www.youtube.com/embed/EXeTwQWrcwY?si=Zs-X9ziW-4f1UwTa',
   },
   {
     title: 'Stranger Things',
     description: 'A group of friends uncovers supernatural events in a small town.',
     posterURL: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80',
     rating: 8.7,
+    trailerURL: 'https://www.youtube.com/embed/b9EkMc79ZSU?si=HY6uQ4D2wPoGqviS',
   },
   {
     title: 'Avatar',
     description: 'A paraplegic marine joins the fight for Pandora and its mystical world.',
     posterURL: 'https://images.unsplash.com/photo-1524989948546-a8d9fbb3b75f?auto=format&fit=crop&w=800&q=80',
     rating: 7.9,
+    trailerURL: 'https://www.youtube.com/embed/5PSNL1qE6VY?si=HfLK4vTQz9k0A3TW',
   },
 ]
 
-export default function App() {
-  const [movies, setMovies] = useState(initialMovies)
+function HomePage({ movies, setMovies }) {
   const [titleFilter, setTitleFilter] = useState('')
   const [minRating, setMinRating] = useState(0)
 
@@ -39,6 +51,7 @@ export default function App() {
     description: '',
     posterURL: '',
     rating: 0,
+    trailerURL: '',
   })
 
   const filteredMovies = useMemo(() => {
@@ -60,8 +73,8 @@ export default function App() {
   const handleAddMovie = (e) => {
     e.preventDefault()
 
-    if (!newMovie.title || !newMovie.description || !newMovie.posterURL) {
-      alert('Please fill in the title, description, and poster URL.')
+    if (!newMovie.title || !newMovie.description || !newMovie.posterURL || !newMovie.trailerURL) {
+      alert('Please fill in the title, description, poster URL, and trailer URL.')
       return
     }
 
@@ -69,6 +82,7 @@ export default function App() {
       {
         ...newMovie,
         rating: Number(newMovie.rating) || 0,
+        id: slugify(newMovie.title),
       },
       ...prev,
     ])
@@ -78,6 +92,7 @@ export default function App() {
       description: '',
       posterURL: '',
       rating: 0,
+      trailerURL: '',
     })
   }
 
@@ -121,6 +136,13 @@ export default function App() {
             onChange={handleInputChange}
           />
           <input
+            type="url"
+            name="trailerURL"
+            placeholder="Trailer embed URL"
+            value={newMovie.trailerURL}
+            onChange={handleInputChange}
+          />
+          <input
             type="number"
             name="rating"
             min="0"
@@ -138,5 +160,18 @@ export default function App() {
         <MovieList movies={filteredMovies} />
       </main>
     </div>
+  )
+}
+
+export default function App() {
+  const [movies, setMovies] = useState(initialMovies)
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage movies={movies} setMovies={setMovies} />} />
+        <Route path="/movie/:movieId" element={<MovieDetails movies={movies} />} />
+      </Routes>
+    </BrowserRouter>
   )
 }

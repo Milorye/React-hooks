@@ -14,6 +14,11 @@
   box-sizing: border-box;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -62,7 +67,8 @@ h1 {
 }
 
 .filters,
-.add-movie-form {
+.add-movie-form,
+.movie-detail-page {
   background: rgba(15, 23, 42, 0.82);
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 16px;
@@ -115,7 +121,8 @@ textarea {
   font-size: 1.2rem;
 }
 
-button {
+button,
+.back-link {
   border: none;
   border-radius: 10px;
   padding: 12px 16px;
@@ -124,9 +131,13 @@ button {
   color: white;
   cursor: pointer;
   transition: transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button:hover {
+button:hover,
+.back-link:hover {
   transform: translateY(-1px);
 }
 
@@ -136,11 +147,16 @@ button:hover {
   gap: 20px;
 }
 
+.movie-link {
+  display: block;
+}
+
 .movie-card {
   overflow: hidden;
   border-radius: 18px;
   background: rgba(15, 23, 42, 0.85);
   border: 1px solid rgba(148, 163, 184, 0.18);
+  height: 100%;
 }
 
 .movie-poster {
@@ -187,8 +203,74 @@ button:hover {
   padding: 24px;
 }
 
+.movie-detail-page {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+.movie-detail-page img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.detail-layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  margin-top: 24px;
+}
+
+.detail-info {
+  flex: 1;
+}
+
+.detail-info h2 {
+  margin-top: 0;
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.detail-description {
+  color: #dbe5ff;
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+.trailer-container {
+  margin-top: 18px;
+}
+
+.trailer-container iframe {
+  width: 100%;
+  min-height: 300px;
+  border: none;
+  border-radius: 14px;
+}
+
+.back-link {
+  text-decoration: none;
+}
+
 @media (max-width: 760px) {
-  .controls {
+  .controls,
+  .detail-layout {
     grid-template-columns: 1fr;
+    display: block;
+  }
+
+  .movie-detail-page img {
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 }
